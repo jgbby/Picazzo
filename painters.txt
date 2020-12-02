@@ -1,0 +1,12 @@
+Manually gathered ALLLLLL 1710 photos from the internet of the 7 following artists:
+
+paula modersohn becker
+frida khalo
+max ernst
+ron hicks
+otto dix
+zdszilaw beksinski
+egon schiele
+alberto giacometti
+
+Processed each image into 50x50 jpgs, and then proceeded to wait hours for hte mosaic to complete

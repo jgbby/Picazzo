@@ -1,0 +1,6 @@
+/venv/*
+/paintings/*
+/processed_paintings/*
+/mosaic/*
+/thumbnails/*
+/sections/*
