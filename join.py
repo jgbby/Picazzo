@@ -2,16 +2,13 @@ import cv2
 import numpy as np
 
 # Save Image
-sliceFilePaths = [
-    "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\sections\\sections-0.jpg",
-    "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\sections\\sections-1.jpg",
-    "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\sections\\sections-2.jpg
-    
-]
-destPath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\test.jpg"
+sliceFilePath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\sections\\sections-"
+destPath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\test4.jpg"
 
 final_image = []
-for filepath in sliceFilePaths:
+for i in range(6):
+    fileEnd = str(i) + ".jpg"
+    filepath = sliceFilePath + fileEnd
     sliceIMG = cv2.imread(filepath)
     for row in sliceIMG:
         final_image.append(row)

@@ -7,6 +7,7 @@ import cv2
 import copy
 import time
 from datetime import datetime
+from random import randint
 
 def getAverageRGB(image):
     im = np.array(image)
@@ -59,7 +60,9 @@ def getPaintingIndex(rgb, meanRGBs):
 
 def create_mosaic(filename):
     # PARAMETERS
-    n_splits = 10
+    startRow = 37
+    slices = 20
+    n_splits = 1
     dim = 50
     no_repeat = False
     
@@ -68,7 +71,7 @@ def create_mosaic(filename):
     destPath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\mosaic\\mosaic-" + filename
     thumbnailPath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\thumbnails\\image-thumbnail-" + filename
     sectionPath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\sections\\sections-"
-    paintingSourcePath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\processed_paintings"
+    paintingSourcePath = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\elli_processed_paintings"
 
 
     # Image Processing to reduce dimensions of srcFile
@@ -84,14 +87,15 @@ def create_mosaic(filename):
 
     # Process resized images
     filenamesO, meanRGBsO = processImages(paintingSourcePath)
-    paintingSplitIndex = round(len(filenames) / n_splits, 2)
+    filenames = copy.copy(filenamesO)
+    meanRGBs = copy.copy(meanRGBsO)
+    paintingSplitIndex = floor(len(filenames) / n_splits)
 
 
     
     # Section out image
     img = cv2.cvtColor(cv2.imread(thumbnailPath), cv2.COLOR_BGR2RGB)
     height = img.shape[1]
-    slices = 10 
     incrementSlice = floor(height / slices)
     sliceFilePaths = []
 
@@ -102,18 +106,11 @@ def create_mosaic(filename):
 
     # Iterate image 
     count = 0
-    n_split_reset = 0
-    for rowNum in range(len(img)):
+    n_split_counter = 0
+    for rowNum in range(startRow, len(img)):
 
         # Timer functionality
         start = time.perf_counter()
-
-
-        # Keep track of paintingSplit alternation
-        if rowNum % 3 == 0 and rowNum != 0:
-            n_split_reset = 0
-        else 
-
 
 
         # Section out every increment
@@ -136,11 +133,38 @@ def create_mosaic(filename):
             pixel = row[pixelNum]
 
 
+            if n_splits > 1:
+                n_split_counter = randint(0, n_splits)
+                paintingStartIndex = paintingSplitIndex * n_split_counter
+                paintingEndIndex = paintingSplitIndex * (n_split_counter + 1)
+
+
             # Identify painting (remove copies)
+                paintingIndex = getPaintingIndex(pixel, 
+                    meanRGBs[
+                        paintingStartIndex : paintingEndIndex
+                    ]
+                )
+                paintingName = filenames[
+                    paintingStartIndex : paintingEndIndex
+                ][paintingIndex]
+            #n_split_counter += 1
+
             paintingIndex = getPaintingIndex(pixel, meanRGBs)
             paintingName = filenames[paintingIndex]
+
             path2Painting = os.path.join(paintingSourcePath, paintingName)
             painting = cv2.imread(path2Painting)
+
+
+
+            # Debugging
+            '''
+            cv2.imshow("window", painting)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            '''
+
 
             if no_repeat:
                 filenames.remove(paintingName)
@@ -167,6 +191,7 @@ def create_mosaic(filename):
 
         end = time.perf_counter()
         expectedDiff = round((end - start) * (len(img) - rowNum) / 60, 2)
+        print("Finished row: " + str(rowNum))
         print("Expected Completion in: " + str(expectedDiff) + "minutes")
 
 

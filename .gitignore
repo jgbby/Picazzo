@@ -5,4 +5,5 @@
 /thumbnails/*
 /sections/*
 /elli_paintings/*
-/test.jpg
+/test*.jpg
+/processed_paintings_5000/*

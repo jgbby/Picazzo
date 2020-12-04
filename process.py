@@ -1,8 +1,6 @@
 from PIL import Image, ImageOps
 import numpy as np
 import os
-import matplotlib.image as MPLread
-from colorthief import ColorThief
 
 
 def RGB2Str(RGB):
@@ -37,8 +35,8 @@ def crop(img, dim):
 
 def main():
     count = 0
-    path = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\paintings" 
-    dest_path = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\processed_paintings"
+    path = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\elli_paintings" 
+    dest_path = "C:\\Users\\xlqgi\\DEV\\Friends\\Picazzo\\elli_processed_paintings"
     for filename in os.listdir(path):
 
         # Get paths
@@ -52,6 +50,7 @@ def main():
 
         # Save files and overwrite
         if os.path.isfile(dest_filepath):
+            os.remove(filepath)
             os.remove(dest_filepath)
         new_img.save(dest_filepath)
         count += 1
